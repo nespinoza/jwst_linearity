@@ -3,7 +3,8 @@ from astropy.io import fits
 import numpy as np
 import glob
 
-instrument = 'niriss'
+instrument = 'niriss'#'nircam-lwA'
+plot_median = True
 
 def tick_function(X, gain = 1.):
     """
@@ -14,7 +15,13 @@ def tick_function(X, gain = 1.):
     return ["%.0f" % z for z in V]
 
 if instrument == 'niriss':
-    gain = 1.6 # Approximate gain of NIRISS in e/counts
+    gain = 1.6 # Approximate gain of NIRISS in e/counts (https://jwst-docs.stsci.edu/near-infrared-imager-and-slitless-spectrograph/niriss-instrumentation/niriss-detector-overview)
+elif instrument == 'nirspec-ns1':
+    gain = 0.996 # From https://jwst-docs.stsci.edu/near-infrared-spectrograph/nirspec-instrumentation/nirspec-detectors/nirspec-detector-performance#NIRSpecDetectorPerformance-Detectorgain
+elif instrument == 'nirspec-ns2':
+    gain = 1.137 # From https://jwst-docs.stsci.edu/near-infrared-spectrograph/nirspec-instrumentation/nirspec-detectors/nirspec-detector-performance#NIRSpecDetectorPerformance-Detectorgain
+elif instrument == 'nircam-lwA' or instrument == 'nircam-lwB':
+    gain = 1.82 # From https://jwst-docs.stsci.edu/near-infrared-camera/nircam-instrumentation/nircam-detector-overview/nircam-detector-performance
 else:
     print('Warning: instrument not recognized/gain not defined. Electron values might be off as this assumes gain = 1.')
 # Load result matrices:
@@ -36,12 +43,13 @@ for f in files:
     percent = np.double(f.split('_')[-2])*100.
     label_string = '{0:.0f} percent deviation'.format(percent)
     s = ax1.hist(mf,bins=100,label = label_string,alpha=0.8)
-    # Plot line indicating median counts:
-    max_bin = np.max(s[0])
-    median_counts = np.median(mf)
-    ax1.plot([median_counts,median_counts],[0,max_bin],'r--')
-    ax1.text(median_counts + 1000,max_bin,'Median: {0:.0f} counts'.format(median_counts))
-    ax1.text(median_counts + 1000,max_bin - 30000.,'(~{0:.0f} e$^-$)'.format(median_counts*gain))
+    if plot_median:
+        # Plot line indicating median counts:
+        max_bin = np.max(s[0])
+        median_counts = np.median(mf)
+        ax1.plot([median_counts,median_counts],[0,max_bin],'r--')
+        ax1.text(median_counts + 1000,max_bin,'Median: {0:.0f} counts'.format(median_counts))
+        ax1.text(median_counts + 1000,max_bin - 30000.,'(~{0:.0f} e$^-$)'.format(median_counts*gain))
 ax1.set_xlabel('Number of counts')
 ax1.set_ylabel('Number of pixels with counts')
 ax2.set_xlim(ax1.get_xlim())
