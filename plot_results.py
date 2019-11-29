@@ -16,7 +16,7 @@ def tick_function(X, gain = 1.):
 if instrument == 'niriss':
     gain = 1.6 # Approximate gain of NIRISS in e/counts
 else:
-    print 'Warning: instrument not recognized/gain not defined. Electron values might be off as this assumes gain = 1.'
+    print('Warning: instrument not recognized/gain not defined. Electron values might be off as this assumes gain = 1.')
 # Load result matrices:
 files = glob.glob('*'+instrument+'.fits')
 files.sort()
