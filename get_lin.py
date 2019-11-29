@@ -5,7 +5,7 @@ import numpy as np
 # Define the instrument name:
 instrument = 'niriss'
 # Define the precentage of non-linearity we are searching for:
-x = 0.1
+x = 0.01
 
 # First load the reference files for a given instrument/detector
 # (one can download all these files from https://jwst-crds.stsci.edu):
@@ -50,7 +50,6 @@ for i in range(d.shape[1]):
         # Calculate where the x% level of non-linearity deviation happens:
         idx = np.where(p<x)[0]
         if len(idx>0):
-            print(i,j,linearized_signal[idx[-1]])
             solution_matrix[i,j] = linearized_signal[idx[-1]]
 
 # Save the "x% saturation levels" image for future post-processing:
