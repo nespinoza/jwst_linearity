@@ -3,9 +3,9 @@ from astropy.io import fits
 import numpy as np
 
 # Define the instrument name:
-instrument = 'nircam-lwB'
+instrument = 'nirspec-ns2'
 # Define the precentages of non-linearity we are searching for:
-x_in = [0.01, 0.05, 0.1]
+x_in = [0.01, 0.05, 0.1][::-1]
 
 # First load the reference files for a given instrument/detector
 # (one can download all these files from https://jwst-crds.stsci.edu):
@@ -14,7 +14,7 @@ if instrument == 'niriss':
 elif instrument == 'nirspec-ns1':
     rfile = 'data/jwst_nirspec_linearity_0024.fits'
 elif instrument == 'nirspec-ns2':
-    rfile = 'data/jwst_nirspec_linearity_0023.fits'
+    rfile = 'data/jwst_nirspec_linearity_0025.fits'#'data/jwst_nirspec_linearity_0023.fits'
 elif instrument == 'nircam-lwA':
     rfile = 'data/jwst_nircam_linearity_0052.fits'
 elif instrument == 'nircam-lwB':
